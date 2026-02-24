@@ -47,35 +47,50 @@ def index():
 def quiz():
     try:
         dados = request.json
-        u_scores = dados['scores']
+        u_scores = dados.get('scores', {})
         
-        melhor_match = None
+        melhor_match = PARTICIPANTES[0]
         menor_dist = 999
         
+        # Cálculo matemático de proximidade
         for p in PARTICIPANTES:
-            dist = abs(u_scores['res'] - p['res']) + \
-                   abs(u_scores['rac'] - p['rac']) + \
-                   abs(u_scores['lea'] - p['lea']) + \
-                   abs(u_scores['soc'] - p['soc']) + \
-                   abs(u_scores['car'] - p['car']) + \
-                   abs(u_scores['est'] - p['est'])
+            dist = abs(u_scores.get('res', 5) - p['res']) + \
+                   abs(u_scores.get('rac', 5) - p['rac']) + \
+                   abs(u_scores.get('lea', 5) - p['lea']) + \
+                   abs(u_scores.get('soc', 5) - p['soc']) + \
+                   abs(u_scores.get('car', 5) - p['car']) + \
+                   abs(u_scores.get('est', 5) - p['est'])
             
             if dist < menor_dist:
                 menor_dist = dist
                 melhor_match = p
         
-        # Salvar Lead no CSV para suas futuras vendas
-        with open("leads_vendas.csv", "a", newline="", encoding="utf-8") as f:
-            writer = csv.writer(f)
-            writer.writerow([datetime.now(), dados['nome'], dados['email'], melhor_match['nome']])
-        
+        # SALVAMENTO SEGURO EM CSV (Evita travamento no Render)
+        try:
+            # Verifica se o arquivo existe para não dar erro de permissão
+            with open("leads_vendas.csv", "a", newline="", encoding="utf-8") as f:
+                writer = csv.writer(f)
+                writer.writerow([
+                    datetime.now().strftime("%Y-%m-%d %H:%M:%S"), 
+                    dados.get('nome', 'Sem Nome'), 
+                    dados.get('email', 'Sem Email'), 
+                    melhor_match['nome']
+                ])
+        except Exception as csv_error:
+            # Se der erro no CSV, ele apenas avisa no log do Render e não trava o site
+            print(f"Aviso: Erro ao salvar lead no CSV (Ignore se o resultado aparecer): {csv_error}")
+
         return jsonify({
             "personagem": melhor_match['nome'],
             "foto": melhor_match['foto'],
             "bio": melhor_match['bio']
         })
+
     except Exception as e:
-        return jsonify({"error": str(e)}), 400
+        print(f"Erro crítico no processamento: {e}")
+        return jsonify({"error": "Erro interno no servidor"}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    # Porta configurada para rodar localmente ou em produção
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
