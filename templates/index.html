@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BBB Quiz Pro | Edição 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --primary: #ffcc00; 
+            --secondary: #00d4ff; 
+            --bg-overlay: rgba(10, 14, 23, 0.85); 
+        }
+
+        body { 
+            margin: 0; 
+            font-family: 'Montserrat', sans-serif; 
+            /* CONFIGURAÇÃO DA IMAGEM DE FUNDO */
+            background: linear-gradient(rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0.75)), 
+                        url('https://snipboard.io/sUJrSA.jpg'); 
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            color: white; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+        }
+
+        .container { 
+            background: var(--bg-overlay); 
+            backdrop-filter: blur(15px); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            border-radius: 30px; 
+            padding: 40px; 
+            width: 90%; 
+            max-width: 500px; 
+            text-align: center; 
+            box-shadow: 0 25px 50px rgba(0,0,0,0.8); 
+        }
+
+        .progress-bar { 
+            width: 100%; 
+            height: 8px; 
+            background: rgba(255,255,255,0.1); 
+            border-radius: 10px; 
+            margin-bottom: 30px; 
+            overflow: hidden; 
+        }
+
+        .progress-fill { 
+            height: 100%; 
+            background: linear-gradient(90deg, var(--secondary), var(--primary)); 
+            width: 0%; 
+            transition: width 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
+        }
+
+        .step { display: none; }
+        .step.active { display: block; animation: fadeIn 0.5s forwards; }
+
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(15px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+
+        h1 { color: var(--primary); text-transform: uppercase; font-size: 1.6rem; font-weight: 900; }
+        p { line-height: 1.6; color: #eee; }
+
+        input { 
+            width: 100%; 
+            padding: 15px; 
+            margin: 10px 0; 
+            border-radius: 12px; 
+            border: 1px solid rgba(255,255,255,0.2); 
+            background: rgba(0,0,0,0.5); 
+            color: white; 
+            box-sizing: border-box; 
+            outline: none; 
+            font-size: 1rem;
+        }
+
+        .option-btn { 
+            width: 100%; 
+            padding: 16px; 
+            margin: 10px 0; 
+            border-radius: 15px; 
+            border: 2px solid transparent; 
+            background: rgba(255,255,255,0.07); 
+            color: white; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: 0.3s; 
+            text-align: left; 
+            font-size: 0.95rem;
+        }
+
+        .option-btn:hover { 
+            border-color: var(--primary); 
+            background: rgba(255, 204, 0, 0.15); 
+            transform: translateX(8px); 
+        }
+
+        .btn-start { 
+            background: var(--primary); 
+            color: black; 
+            padding: 18px 45px; 
+            border-radius: 50px; 
+            border: none; 
+            font-weight: 900; 
+            cursor: pointer; 
+            margin-top: 20px; 
+            text-transform: uppercase; 
+            box-shadow: 0 10px 20px rgba(255, 204, 0, 0.3);
+            transition: 0.3s;
+        }
+
+        .btn-start:hover { transform: scale(1.05); }
+
+        .result-img { 
+            width: 180px; 
+            height: 180px; 
+            border-radius: 50%; 
+            border: 6px solid var(--primary); 
+            object-fit: cover; 
+            margin: 20px auto; 
+            display: block; 
+            box-shadow: 0 0 35px rgba(255, 204, 0, 0.5); 
+        }
+
+        .bio-box { 
+            background: rgba(0,0,0,0.4); 
+            padding: 20px; 
+            border-radius: 15px; 
+            margin: 20px 0; 
+            text-align: center; 
+            border-left: 4px solid var(--primary);
+        }
+
+        .share-btn { 
+            background: #25d366; 
+            color: white; 
+            padding: 15px 30px; 
+            border-radius: 50px; 
+            text-decoration: none; 
+            display: inline-block; 
+            font-weight: 700; 
+            margin-top: 15px; 
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4); 
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="progress-bar"><div class="progress-fill" id="progress"></div></div>
+
+    <div id="quiz-flow">
+        <div class="step active" id="step-0">
+            <h1>👁️ O Olho Tudo Vê</h1>
+            <p>Descubra agora quem você seria dentro da casa mais vigiada do Brasil. Mas antes, identifique-se:</p>
+            <input type="text" id="nome" placeholder="Seu Nome ou Apelido">
+            <input type="email" id="email" placeholder="Seu E-mail">
+            <button class="btn-start" onclick="nextStep(1)">ENTRAR NA CASA</button>
+        </div>
+    </div>
+
+    <div class="step" id="step-result">
+        <h2 style="margin-bottom: 5px;">Parabéns, <span id="user-nome-res" style="color: var(--secondary);"></span>!</h2>
+        <p style="margin-top: 0;">Sua personalidade é idêntica ao de:</p>
+        <h1 id="res-nome" style="font-size: 2.3rem; margin: 10px 0; letter-spacing: 1px;">...</h1>
+        <img id="res-foto" src="" class="result-img">
+        <div class="bio-box">
+            <p id="res-bio" style="font-style: italic; font-size: 1rem; margin: 0; color: #fff;"></p>
+        </div>
+        <a id="whatsapp-link" href="#" target="_blank" class="share-btn">Compartilhar no WhatsApp</a>
+        <br><br>
+        <button onclick="location.reload()" style="background:none; border:none; color:#ccc; cursor:pointer; text-decoration:underline; font-size: 0.9rem;">Refazer Teste</button>
+    </div>
+</div>
+
+<script>
+    const perguntas = [
+        { q: "Prova de Resistência: 12h se passaram e o prêmio é uma imunidade.", opt: ["Não saio nem que desmaie", "Tento negociar a vitória", "Saio, prefiro guardar energia"], cat: "res" },
+        { q: "Seu melhor amigo cometeu um erro e a casa toda o isolou.", opt: ["Fico do lado dele até o fim", "Me afasto estrategicamente", "Voto nele para ser justo"], cat: "lea" },
+        { q: "Jogo da Discórdia: Hora de dar as plaquinhas.", opt: ["Falo tudo o que penso na cara", "Escolho o alvo mais fácil", "Tento ser diplomata"], cat: "rac" },
+        { q: "Voto no Confessionário: O líder indicou seu aliado.", opt: ["Voto com o grupo", "Voto por estratégia", "Sigo meu coração"], cat: "est" },
+        { q: "Festa na Casa: Você é o que...", opt: ["Dança até o fim", "Fica conversando jogo", "Vai dormir cedo"], cat: "soc" },
+        { q: "O público está te vendo. Você foca em...", opt: ["Ser 100% autêntico", "Cuidar da minha imagem", "Fazer o povo rir"], cat: "car" },
+        { q: "O Big Fone toca no meio da tarde.", opt: ["Corro como se fosse minha vida", "Espero ver se alguém atende", "Tenho medo de ser algo ruim"], cat: "res" },
+        { q: "Indicação do Líder: Você foi o escolhido da semana.", opt: ["Enfrento o líder ao vivo", "Começo a calcular o bate-volta", "Me isolo para chorar"], cat: "rac" },
+        { q: "Aliança: Descobriu que estão combinando votos em você.", opt: ["Enfrento o grupo todo", "Tento virar o jogo por trás", "Fico triste e desisto"], cat: "est" },
+        { q: "Culinária: Tá no VIP ou na Xepa?", opt: ["Comeria qualquer coisa para vencer", "Reclamo da comida", "Divido tudo com o grupo"], cat: "lea" },
+        { q: "Fama: Você quer o prêmio ou os seguidores?", opt: ["O prêmio é tudo", "Quero os milhões de fãs", "O que vier é lucro"], cat: "car" },
+        { q: "Final de Jogo: Você chegou no TOP 3.", opt: ["Fui o maior jogador", "Fui o mais fiel", "Fui quem mais curtiu"], cat: "soc" }
+    ];
+
+    let current = 0;
+    let userScores = { res: 0, rac: 0, lea: 0, soc: 0, car: 0, est: 0 };
+
+    function init() {
+        const flow = document.getElementById('quiz-flow');
+        perguntas.forEach((p, i) => {
+            const div = document.createElement('div');
+            div.className = 'step';
+            div.id = `step-${i+1}`;
+            div.innerHTML = `<h1>Questão ${i+1}</h1><p style="min-height:55px">${p.q}</p>` + 
+                p.opt.map((o, idx) => `<button class="option-btn" onclick="answer(${i}, ${10 - idx*4})">${o}</button>`).join('');
+            flow.appendChild(div);
+        });
+    }
+
+    function nextStep(s) {
+        document.querySelectorAll('.step').forEach(el => el.classList.remove('active'));
+        const target = document.getElementById(`step-${s}`);
+        if(target) target.classList.add('active');
+        document.getElementById('progress').style.width = `${(s / (perguntas.length + 1)) * 100}%`;
+    }
+
+    function answer(index, pts) {
+        const cat = perguntas[index].cat;
+        userScores[cat] += pts;
+        current++;
+        if(current < perguntas.length) {
+            nextStep(current + 1);
+        } else {
+            for(let k in userScores) userScores[k] = userScores[k] / 2;
+            enviarFinal();
+        }
+    }
+
+    async function enviarFinal() {
+        const nomeUsuario = document.getElementById('nome').value;
+        const email = document.getElementById('email').value;
+        if(!nomeUsuario || !email) { alert("Por favor, preencha nome e email!"); location.reload(); return; }
+
+        document.getElementById('progress').style.width = '100%';
+
+        try {
+            const res = await fetch('/quiz', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ nome: nomeUsuario, email: email, scores: userScores })
+            });
+            const data = await res.json();
+
+            document.getElementById('user-nome-res').innerText = nomeUsuario.split(' ')[0];
+            document.getElementById('res-nome').innerText = data.personagem;
+            document.getElementById('res-foto').src = `/static/img/${data.foto}`;
+            document.getElementById('res-bio').innerText = data.bio;
+            
+            const msg = encodeURIComponent(`Eita! Acabei de descobrir que eu sou a cara do(a) ${data.personagem} no BBB! Veja o seu perfil também:`);
+            document.getElementById('whatsapp-link').href = `https://api.whatsapp.com/send?text=${msg}`;
+            
+            nextStep('result');
+        } catch (e) {
+            alert("Erro ao processar. Verifique se o app.py está rodando!");
+        }
+    }
+
+    init();
+</script>
+</body>
+</html>
