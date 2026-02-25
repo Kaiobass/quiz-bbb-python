@@ -30,7 +30,7 @@ PARTICIPANTES = [
     {
         "nome": "Prior", "res": 8, "rac": 7, "lea": 6, "soc": 7, "car": 8, "est": 8, 
         "foto": "prior.jpg", 
-        "bio": "Intenso e competitivo! Você é o jogador que não foge da raia e joga com transparência total, transformando o jogo em um tabuleiro de pura adrenalina."
+        "bio": "Intenso e competitivo! Você é o jogador que não foge do confronto e joga com transparência total, transformando o jogo em um tabuleiro de pura adrenalina."
     },
     {
         "nome": "Gil do Vigor", "res": 8, "rac": 9, "lea": 8, "soc": 9, "car": 10, "est": 8, 
@@ -94,3 +94,4 @@ if __name__ == '__main__':
     # Porta configurada para rodar localmente ou em produção
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
+
